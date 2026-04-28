@@ -47,7 +47,28 @@
             filter: blur(80px);
         }
 
-        #progress-rail { position: fixed; left: 40px; top: 0; width: 1px; height: 100vh; background: var(--glass-border); z-index: 50; }
+        /* Progress rail starts hidden */
+#progress-rail { 
+    position: fixed; 
+    left: 40px; 
+    top: 0; 
+    width: 1px; 
+    height: 100vh; 
+    background: var(--glass-border); 
+    z-index: 50; 
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.5s ease; /* Smooth fade in */
+}
+
+#progress-fill { 
+    width: 3px; 
+    background: var(--accent); 
+    position: absolute; 
+    top: 0; 
+    left: -1px; 
+    transition: height 0.2s; 
+    box-shadow: 0 0 15px var(--accent); 
+}
         #progress-fill { width: 3px; background: var(--accent); position: absolute; top: 0; left: -1px; transition: height 0.2s; box-shadow: 0 0 15px var(--accent); }
 
         #cursor { position: fixed; width: 8px; height: 8px; background: var(--cursor-color); border-radius: 50%; pointer-events: none; z-index: 9999; }
@@ -202,11 +223,22 @@
         });
 
         window.addEventListener('scroll', () => {
-            const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const progress = (window.scrollY / h * 100);
-            const fill = document.getElementById('progress-fill');
-            if(fill) fill.style.height = progress + "%";
-        });
+    const rail = document.getElementById('progress-rail');
+    const fill = document.getElementById('progress-fill');
+    const scrollPos = window.scrollY;
+    const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    
+    // Fade in the rail once the user scrolls down 10px
+    if (scrollPos > 10) {
+        rail.style.opacity = "1";
+    } else {
+        rail.style.opacity = "0";
+    }
+
+    // Update fill height
+    const progress = (scrollPos / totalHeight * 100);
+    if(fill) fill.style.height = progress + "%";
+});
 
         function draw() {
             const m = document.getElementById('card-container');
