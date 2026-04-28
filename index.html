@@ -214,9 +214,13 @@
         };
 
         const documentation = {
-            compile: { t: "Compile Nodes", c: "green-400", list: [{ n: "Pointer Logic", url: "#", d: "Memory address logic." }, { n: "Memory Layout", url: "#", d: "Stack/Heap mapping." }, { n: "C++ Foundations", url: "#", d: "Core C++." }] },
-            logic: { t: "Logic Nodes", c: "blue-400", list: [{ n: "Boolean Algebra", url: "#", d: "Digital bedrock." }, { n: "Graph Theory", url: "#", d: "Connectivity." }] },
-            buffer: { t: "Buffer Nodes", c: "yellow-400", list: [{ n: "B-Tree Indexing", url: "#", d: "DB Structures." }, { n: "Dynamic Prog", url: "#", d: "Optimization." }] }
+            compile: { t: "Compile Nodes", c: "green-400", list: [{ n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Master memory addressing, pointer arithmetic, and indirection in C/C++." }, 
+                                                                  { n: "Memory Layout", url: "https://www.geeksforgeeks.org/memory-layout-of-c-program/", d: "Understanding the Stack, Heap, Data, and Text segments of an executable." }, 
+                                                                  { n: "C++ Foundations", url: "https://isocpp.org/wiki/faq/index", d: "Core C++ principles: OOP, templates, and the Standard Template Library (STL)." }] },
+            logic: { t: "Logic Nodes", c: "blue-400", list: [{ n: "Boolean Algebra", url: "https://www.electronics-tutorials.ws/boolean/bool_1.html", d: "The mathematical foundation of digital logic gates and circuit simplification." }, 
+                                                             { n: "Graph Theory", url: "https://www.britannica.com/science/graph-theory", d: "Study of networks, vertices, and edges—essential for routing and data modeling." }] },
+            buffer: { t: "Buffer Nodes", c: "yellow-400", list: [{ n: "B-Tree Indexing", url: "https://use-the-index-luke.com/sql/anatomy/the-tree", d: "How database engines use balanced trees to perform lightning-fast searches." }, 
+                                                                 { n: "Dynamic Prog", url: "https://www.freecodecamp.org/news/follow-these-steps-to-solve-any-dynamic-programming-problem/", d: "Breaking down complex problems into overlapping sub-problems for optimization.." }] }
         };
 
         const studyMaterial = {
@@ -287,12 +291,28 @@
             if(fill) fill.style.height = (scrollPos / totalHeight * 100) + "%";
         });
 
-        function openStudyModal(n, d, url) {
-            document.getElementById('popup-content').innerHTML = `
-                <div class="flex justify-between items-start mb-8"><div><h2 class="text-4xl font-black uppercase tracking-tighter">${n}</h2></div><button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button></div>
-                <div class="space-y-6 text-lg opacity-80 leading-relaxed"><p>${d}</p></div>`;
-            showModal();
-        }
+        function openStudyModal(catKey, nodeName) {
+    const item = documentation[catKey].list.find(n => n.n === nodeName);
+    document.getElementById('popup-content').innerHTML = `
+        <div class="flex justify-between items-start mb-8">
+            <div>
+                <span class="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-2 block">Foundational Node</span>
+                <h2 class="text-4xl font-black uppercase tracking-tighter">${item.n}</h2>
+            </div>
+            <button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button>
+        </div>
+        <div class="space-y-6 text-lg opacity-80 leading-relaxed">
+            <p>${item.d}</p>
+            <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
+                <p class="text-sm font-bold mb-2">Verified Reference:</p>
+                <a href="${item.url}" target="_blank" class="text-green-500 break-all font-mono text-sm underline hover:text-green-400">${item.url}</a>
+            </div>
+        </div>
+        <div class="mt-10 pt-8 border-t border-white/5 flex gap-4">
+            <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:scale-105 transition-transform inline-block">Access Documentation</a>
+        </div>`;
+    showModal();
+}
 
         function openProgressModal(catKey, catTitle) {
             const items = masteryCategories[catKey].list;
