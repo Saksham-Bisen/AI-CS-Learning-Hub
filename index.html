@@ -145,26 +145,34 @@
         <div id="vault-nodes" class="grid grid-cols-3 gap-12"></div>
     </section>
     
-    <iframe id="sandbox-ide" src="https://onecompiler.com/embed/python?theme=dark" width="100%" height="100%" frameborder="0" class="grayscale-[0.8] brightness-[0.9]"></iframe>
-    <section id="compiler" class="max-w-7xl mx-auto py-40 px-10 reveal">
-        <div class="mb-16">
-            <h2 class="text-6xl font-black uppercase tracking-tighter mb-4" style="color: var(--text-primary)">Sandbox</h2>
-            <p style="color: var(--text-secondary);" class="uppercase tracking-widest text-[10px] font-bold">Execution Environment // Root Access</p>
-        </div>
-        <div class="liquid-glass relative rounded-[3.5rem] p-1 overflow-hidden scanlines">
-            <div class="bg-[#051610] p-6 flex items-center justify-between border-b border-white/5">
-                <div class="flex gap-2">
-                    <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
-                    <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
-                </div>
-                <div class="mono text-[9px] tracking-[0.3em] opacity-30 font-bold uppercase text-white">Root@mit-wpu_lab</div>
+   <section id="compiler" class="max-w-7xl mx-auto py-40 px-10 reveal">
+    <div class="mb-16">
+        <h2 class="text-6xl font-black uppercase tracking-tighter mb-4" style="color: var(--text-primary)">Sandbox</h2>
+        <p style="color: var(--text-secondary);" class="uppercase tracking-widest text-[10px] font-bold">Execution Environment // Root Access</p>
+    </div>
+    
+    <div class="liquid-glass relative rounded-[3.5rem] p-1 overflow-hidden scanlines">
+        <div class="bg-[#051610] p-6 flex items-center justify-between border-b border-white/5">
+            <div class="flex gap-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
             </div>
-            <div class="h-[600px] relative bg-[#010805]">
-                <iframe src="https://onecompiler.com/embed/python?theme=dark" width="100%" height="100%" frameborder="0" class="grayscale-[0.8] brightness-[0.9]"></iframe>
-            </div>
+            <div class="mono text-[9px] tracking-[0.3em] opacity-30 font-bold uppercase text-white">Root@mit-wpu_lab</div>
         </div>
-    </section>
+
+        <div class="h-[600px] relative bg-[#010805]">
+            <iframe 
+                id="sandbox-ide" 
+                src="https://onecompiler.com/embed/python?theme=dark" 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                class="grayscale-[0.8] brightness-[0.9]">
+            </iframe>
+        </div>
+    </div>
+</section>
 
     <footer class="py-64 text-center relative overflow-hidden">
         <div class="reveal">
