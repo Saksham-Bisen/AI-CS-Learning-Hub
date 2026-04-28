@@ -177,20 +177,16 @@ function onYouTubeIframeAPIReady() {
     ytPlayer = new YT.Player('yt-player', {
         height: '0', width: '0', videoId: '8MUlk3qjByY',
         playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': '8MUlk3qjByY' },
-        events: { 'onReady': (e) => { e.target.setVolume(20); e.target.mute(); } }
+        events: { 'onReady': (e) => { e.target.setVolume(20); } }
     });
 }
 
-// Fixed: Unified audio start function
 function startAudio() { 
     if (!audioStarted && ytPlayer && ytPlayer.playVideo) { 
-        ytPlayer.playVideo(); 
-        ytPlayer.unMute(); 
-        isMuted = false;
+        ytPlayer.playVideo(); ytPlayer.unMute(); isMuted = false;
         const icon = document.getElementById('music-icon');
         if(icon) icon.setAttribute('data-lucide', 'volume-2');
-        audioStarted = true; 
-        lucide.createIcons();
+        audioStarted = true; lucide.createIcons();
     } 
 }
 
@@ -224,25 +220,25 @@ const masteryCategories = {
 };
 
 const documentation = {
-    compile: { t: "Compile Nodes", c: "green-400", list: [
-        { n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Master memory addressing, pointer arithmetic, and indirection in C/C++." }, 
-        { n: "Memory Layout", url: "https://www.geeksforgeeks.org/memory-layout-of-c-program/", d: "Understanding the Stack, Heap, Data, and Text segments of an executable." }, 
-        { n: "C++ Foundations", url: "https://isocpp.org/wiki/faq/index", d: "Core C++ principles: OOP, templates, and the Standard Template Library (STL)." }
+    prog: { t: "Compile Nodes", c: "green-400", list: [
+        { n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Logic of memory addresses." },
+        { n: "Memory Layout", url: "https://osdev.org/Memory_Map_(x86)", d: "Stack vs Heap mapping." },
+        { n: "C++ Foundations", url: "https://isocpp.org", d: "Core architectural C++." }
     ]},
-    logic: { t: "Logic Nodes", c: "blue-400", list: [
-        { n: "Boolean Algebra", url: "https://www.electronics-tutorials.ws/boolean/bool_1.html", d: "The mathematical foundation of digital logic gates and circuit simplification." }, 
-        { n: "Graph Theory", url: "https://www.britannica.com/science/graph-theory", d: "Study of networks, vertices, and edges—essential for routing and data modeling." }
+    math: { t: "Logic Nodes", c: "blue-400", list: [
+        { n: "Boolean Algebra", url: "https://brilliant.org", d: "Bedrock of digital logic." },
+        { n: "Graph Theory", url: "https://www.youtube.com/watch?v=LFKZLXVO-ra", d: "Connectivity theory." }
     ]},
     buffer: { t: "Buffer Nodes", c: "yellow-400", list: [
-        { n: "B-Tree Indexing", url: "https://use-the-index-luke.com/sql/anatomy/the-tree", d: "How database engines use balanced trees to perform lightning-fast searches." }, 
-        { n: "Dynamic Prog", url: "https://www.freecodecamp.org/news/follow-these-steps-to-solve-any-dynamic-programming-problem/", d: "Breaking down complex problems into overlapping sub-problems for optimization.." }
+        { n: "B-Tree Indexing", url: "https://neetcode.io", d: "Database engine structures." },
+        { n: "Dynamic Prog", url: "https://roadmap.sh", d: "Optimizing sub-problems." }
     ]}
 };
 
 const studyMaterial = {
     docs: { t: "Documentation", c: "green-400", list: [{ n: "MDN Web Docs", url: "https://developer.mozilla.org" }, { n: "C++ Reference", url: "https://en.cppreference.com" }] },
-    video: { t: "Video Learning", c: "orange-400", list: [{ n: "freeCodeCamp", url: "https://www.youtube.com/@freecodecamp" }, { n: "MyCodeSchool (DSA)", url: "https://www.youtube.com/@mycodeschool" }] },
-    interactive: { t: "Interactive", c: "blue-400", list: [{ n: "LeetCode", url: "https://leetcode.com" }, { n: "CodeWars", url: "https://codewars.com" }] }
+    video: { t: "Video Learning", c: "orange-400", list: [{ n: "freeCodeCamp", url: "https://youtube.com" }, { n: "MyCodeSchool (DSA)", url: "https://youtube.com" }] },
+    inter: { t: "Interactive", c: "blue-400", list: [{ n: "LeetCode", url: "https://leetcode.com" }, { n: "CodeWars", url: "https://codewars.com" }] }
 };
 
 let state = JSON.parse(localStorage.getItem('cs-construct-master-final')) || {};
@@ -291,33 +287,15 @@ function draw() {
     lucide.createIcons();
 }
 
-// --- INTERACTION HANDLERS ---
-document.addEventListener('mousemove', e => {
-    const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
-    c.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-    f.style.transform = `translate(${e.clientX-20}px, ${e.clientY-20}px)`;
-    document.documentElement.style.setProperty('--m-x', (e.clientX/window.innerWidth)*100+'%');
-    document.documentElement.style.setProperty('--m-y', (e.clientY/window.innerHeight)*100+'%');
-});
-
-window.addEventListener('scroll', () => {
-    const rail = document.getElementById('progress-rail'); 
-    const fill = document.getElementById('progress-fill');
-    const scrollPos = window.scrollY; 
-    const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    rail.style.opacity = scrollPos > 20 ? "1" : "0";
-    if(fill) fill.style.height = (scrollPos / totalHeight * 100) + "%";
-});
-
-// FIXED: Matching parameters with the draw() call
 function openStudyModal(catKey, nodeName) {
-    const item = documentation[catKey].list.find(n => n.n === nodeName);
+    const category = documentation[catKey];
+    if(!category) return;
+    const item = category.list.find(n => n.n === nodeName);
+    if(!item) return;
+
     document.getElementById('popup-content').innerHTML = `
         <div class="flex justify-between items-start mb-8">
-            <div>
-                <span class="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-2 block">Foundational Node</span>
-                <h2 class="text-4xl font-black uppercase tracking-tighter">${item.n}</h2>
-            </div>
+            <div><h2 class="text-4xl font-black uppercase tracking-tighter">${item.n}</h2></div>
             <button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button>
         </div>
         <div class="space-y-6 text-lg opacity-80 leading-relaxed">
@@ -328,7 +306,8 @@ function openStudyModal(catKey, nodeName) {
             </div>
         </div>
         <div class="mt-10 pt-8 border-t border-white/5 flex gap-4">
-            <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:scale-105 transition-transform inline-block">Access Documentation</a>
+            <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full inline-block">Access Material</a>
+            <button onclick="toggleVerify('${catKey}', '${item.n}', '${category.t}')" class="border border-white/10 text-white font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:bg-white/5">Verify Mastery</button>
         </div>`;
     showModal();
 }
@@ -337,7 +316,7 @@ function openProgressModal(catKey, catTitle) {
     const items = masteryCategories[catKey].list;
     const done = state[catKey] || {};
     document.getElementById('popup-content').innerHTML = `
-        <div class="flex justify-between items-center mb-8"><h2 class="text-4xl font-black uppercase tracking-tighter">${catTitle} Mastery</h2><button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button></div>
+        <div class="flex justify-between items-center mb-8"><h2 class="text-4xl font-black uppercase tracking-tighter">${catTitle} Progress</h2><button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button></div>
         <div class="space-y-2">${items.map(i => `<div onclick="toggleVerify('${catKey}','${i}', '${catTitle}')" class="p-6 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:bg-white/10 cursor-pointer transition-all"><span class="${done[i] ? 'opacity-20 line-through text-green-500' : ''}">${i}</span><div class="w-5 h-5 rounded-full flex items-center justify-center border ${done[i] ? 'bg-green-500 border-none' : 'border-white/20'}">${done[i] ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div></div>`).join('')}</div>`;
     showModal();
 }
@@ -347,18 +326,28 @@ function toggleVerify(cat, name, title) {
     state[cat][name] ? delete state[cat][name] : state[cat][name] = true;
     localStorage.setItem('cs-construct-master-final', JSON.stringify(state));
     draw(); 
-    openProgressModal(cat, title); // Keep modal open to show progress
+    // Check if we are in a study modal or progress modal to refresh properly
+    const h2 = document.querySelector('#popup-content h2').innerText;
+    if(h2.includes('PROGRESS')) openProgressModal(cat, title);
 }
 
-function showModal() { 
-    document.getElementById('popup-window').classList.add('active'); 
-    document.getElementById('modal-overlay').classList.add('active'); 
-    lucide.createIcons(); 
-}
-function closeModal() { 
-    document.getElementById('popup-window').classList.remove('active'); 
-    document.getElementById('modal-overlay').classList.remove('active'); 
-}
+function showModal() { document.getElementById('popup-window').classList.add('active'); document.getElementById('modal-overlay').classList.add('active'); lucide.createIcons(); }
+function closeModal() { document.getElementById('popup-window').classList.remove('active'); document.getElementById('modal-overlay').classList.remove('active'); }
+
+// Mouse/Scroll
+document.addEventListener('mousemove', e => {
+    const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
+    c.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    f.style.transform = `translate(${e.clientX-20}px, ${e.clientY-20}px)`;
+    document.documentElement.style.setProperty('--m-x', (e.clientX/window.innerWidth)*100+'%');
+    document.documentElement.style.setProperty('--m-y', (e.clientY/window.innerHeight)*100+'%');
+});
+window.addEventListener('scroll', () => {
+    const rail = document.getElementById('progress-rail'); const fill = document.getElementById('progress-fill');
+    const scrollPos = window.scrollY; const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    rail.style.opacity = scrollPos > 20 ? "1" : "0";
+    if(fill) fill.style.height = (scrollPos / totalHeight * 100) + "%";
+});
 
 draw();
 const obs = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('active')), {threshold: 0.1});
