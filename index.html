@@ -47,29 +47,27 @@
             filter: blur(80px);
         }
 
-        /* Progress rail starts hidden */
-#progress-rail { 
-    position: fixed; 
-    left: 40px; 
-    top: 0; 
-    width: 1px; 
-    height: 100vh; 
-    background: var(--glass-border); 
-    z-index: 50; 
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.5s ease; /* Smooth fade in */
-}
+        #progress-rail { 
+            position: fixed; 
+            left: 40px; 
+            top: 0; 
+            width: 1px; 
+            height: 100vh; 
+            background: var(--glass-border); 
+            z-index: 50; 
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
 
-#progress-fill { 
-    width: 3px; 
-    background: var(--accent); 
-    position: absolute; 
-    top: 0; 
-    left: -1px; 
-    transition: height 0.2s; 
-    box-shadow: 0 0 15px var(--accent); 
-}
-        #progress-fill { width: 3px; background: var(--accent); position: absolute; top: 0; left: -1px; transition: height 0.2s; box-shadow: 0 0 15px var(--accent); }
+        #progress-fill { 
+            width: 3px; 
+            background: var(--accent); 
+            position: absolute; 
+            top: 0; 
+            left: -1px; 
+            transition: height 0.2s; 
+            box-shadow: 0 0 15px var(--accent); 
+        }
 
         #cursor { position: fixed; width: 8px; height: 8px; background: var(--cursor-color); border-radius: 50%; pointer-events: none; z-index: 9999; }
         #cursor-follower { position: fixed; width: 40px; height: 40px; border: 1px solid var(--cursor-color); opacity: 0.3; border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.12s ease-out; }
@@ -144,6 +142,13 @@
         </div>
         <div id="vault-nodes" class="grid grid-cols-3 gap-12"></div>
     </section>
+
+    <section id="resources" class="max-w-7xl mx-auto py-32 px-10 reveal">
+        <div class="mb-24">
+            <h2 class="text-7xl font-black uppercase tracking-tighter leading-none" style="color: var(--text-primary)">Free <span class="text-green-500">Study Resources</span></h2>
+        </div>
+        <div id="resource-nodes" class="grid grid-cols-3 gap-12"></div>
+    </section>
     
    <section id="compiler" class="max-w-7xl mx-auto py-40 px-10 reveal">
     <div class="mb-16">
@@ -207,32 +212,40 @@
             ai: { t: "Neural", i: "brain", c: "red-500", list: [{ n: "Transformers", url: "https://arxiv.org/abs/1706.03762", d: "The 'Attention' mechanism protocol." }] }
         };
 
+        const resources = {
+            documentation: { t: "Documentation", i: "book", c: "green-400", list: [
+                { n: "MDN Web Docs", url: "https://developer.mozilla.org" },
+                { n: "C++ Reference", url: "https://en.cppreference.com" }
+            ]},
+            video: { t: "Video Learning", i: "play", c: "orange-400", list: [
+                { n: "freeCodeCamp", url: "https://www.youtube.com/c/Freecodecamp" },
+                { n: "MyCodeSchool (DSA)", url: "https://www.youtube.com/user/mycodeschool" }
+            ]},
+            interactive: { t: "Interactive", i: "terminal", c: "blue-400", list: [
+                { n: "LeetCode", url: "https://leetcode.com" },
+                { n: "CodeWars", url: "https://www.codewars.com" }
+            ]}
+        };
+
         let state = JSON.parse(localStorage.getItem('cs-construct-v-final')) || {};
 
-        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
-        audio.loop = true; audio.volume = 0.05; 
-        function startAudio() { audio.play(); }
+        function startAudio() { 
+            const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
+            audio.loop = true; audio.volume = 0.05; 
+            audio.play().catch(() => {});
+        }
 
         function toggleTheme() {
-    const b = document.documentElement;
-    const ide = document.getElementById('sandbox-ide');
-    const isLight = b.getAttribute('data-theme') === 'light';
-    
-    // Toggle the main theme attribute
-    const newTheme = isLight ? 'dark' : 'light';
-    b.setAttribute('data-theme', newTheme);
-    
-    // Update the Lucide icon
-    document.getElementById('theme-icon').setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-    
-    // UPDATE THE IDE THEME
-    if (ide) {
-        // This swaps the URL parameter dynamically
-        ide.src = `https://onecompiler.com/embed/python?theme=${newTheme}`;
-    }
+            const b = document.documentElement;
+            const ide = document.getElementById('sandbox-ide');
+            const isLight = b.getAttribute('data-theme') === 'light';
+            const newTheme = isLight ? 'dark' : 'light';
+            b.setAttribute('data-theme', newTheme);
+            document.getElementById('theme-icon').setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (ide) { ide.src = `https://onecompiler.com/embed/python?theme=${newTheme}`; }
+            lucide.createIcons();
+        }
 
-    lucide.createIcons();
-}
         document.addEventListener('mousemove', e => {
             const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
             if(c && f) {
@@ -244,26 +257,19 @@
         });
 
         window.addEventListener('scroll', () => {
-    const rail = document.getElementById('progress-rail');
-    const fill = document.getElementById('progress-fill');
-    const scrollPos = window.scrollY;
-    const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    
-    // Fade in the rail once the user scrolls down 10px
-    if (scrollPos > 10) {
-        rail.style.opacity = "1";
-    } else {
-        rail.style.opacity = "0";
-    }
-
-    // Update fill height
-    const progress = (scrollPos / totalHeight * 100);
-    if(fill) fill.style.height = progress + "%";
-});
+            const rail = document.getElementById('progress-rail');
+            const fill = document.getElementById('progress-fill');
+            const scrollPos = window.scrollY;
+            const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            if (scrollPos > 10) { rail.style.opacity = "1"; } else { rail.style.opacity = "0"; }
+            const progress = (scrollPos / totalHeight * 100);
+            if(fill) fill.style.height = progress + "%";
+        });
 
         function draw() {
             const m = document.getElementById('card-container');
             const v = document.getElementById('vault-nodes');
+            const r = document.getElementById('resource-nodes');
             
             if(m) {
                 m.innerHTML = Object.keys(topics).map(k => {
@@ -294,6 +300,24 @@
                                 <h5 class="font-bold text-lg mb-1">${node.n}</h5>
                                 <p class="text-[9px] opacity-40 uppercase tracking-widest">Study Documentation</p>
                             </div>
+                        `).join('')}
+                    </div>`;
+                }).join('');
+            }
+
+            if(r) {
+                r.innerHTML = Object.keys(resources).map(k => {
+                    const res = resources[k];
+                    return `<div class="space-y-6 reveal active">
+                        <h4 class="text-[10px] font-bold tracking-[0.4em] text-${res.c} uppercase border-b border-white/5 pb-4">${res.t}</h4>
+                        ${res.list.map(node => `
+                            <a href="${node.url}" target="_blank" class="liquid-glass p-8 rounded-3xl group block hover:border-white/20 transition-all">
+                                <div class="flex justify-between items-start">
+                                    <h5 class="font-bold text-lg mb-1">${node.n}</h5>
+                                    <i data-lucide="external-link" class="w-4 h-4 opacity-20 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <p class="text-[9px] opacity-40 uppercase tracking-widest">Resource Node</p>
+                            </a>
                         `).join('')}
                     </div>`;
                 }).join('');
