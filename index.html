@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONSTRUCT | Architectural Foundations</title>
+    <title>CONSTRUCT | CS Foundations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -37,6 +37,7 @@
             color: var(--text-primary);
             transition: background-color 0.4s ease;
             overflow-x: hidden; margin: 0; padding: 0;
+            cursor: none;
         }
         .mono { font-family: 'Fira Code', monospace; }
 
@@ -46,14 +47,11 @@
             filter: blur(80px);
         }
 
-        /* PROGRESS RAIL */
         #progress-rail { position: fixed; left: 40px; top: 0; width: 1px; height: 100vh; background: var(--glass-border); z-index: 50; }
         #progress-fill { width: 3px; background: var(--accent); position: absolute; top: 0; left: -1px; transition: height 0.2s; box-shadow: 0 0 15px var(--accent); }
 
-        /* CURSOR */
         #cursor { position: fixed; width: 8px; height: 8px; background: var(--cursor-color); border-radius: 50%; pointer-events: none; z-index: 9999; }
         #cursor-follower { position: fixed; width: 40px; height: 40px; border: 1px solid var(--cursor-color); opacity: 0.3; border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.12s ease-out; }
-        @media (min-width: 768px) { #cursor, #cursor-follower { display: block; } body { cursor: none; } }
 
         .liquid-glass { 
             background: var(--glass-bg); 
@@ -62,7 +60,6 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* POP-UP MODAL */
         #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: opacity 0.4s; z-index: 2000; }
         #modal-overlay.active { opacity: 1; pointer-events: auto; }
         #popup-window {
@@ -93,11 +90,11 @@
         <div class="text-xl font-bold tracking-tighter uppercase italic flex items-center gap-2" style="color: var(--text-primary)">
             <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> CS_BASE
         </div>
-        <div class="flex items-center gap-8">
-            <div class="hidden md:flex gap-8 text-[9px] font-bold tracking-[0.3em] uppercase opacity-50">
-                <a href="#core" style="color: var(--text-primary)">Construct</a>
-                <a href="#vault" style="color: var(--text-primary)">Vault</a>
-                <a href="#compiler" style="color: var(--text-primary)">Sandbox</a>
+        <div class="flex items-center gap-12">
+            <div class="hidden md:flex gap-12 text-[10px] font-black tracking-[0.4em] uppercase opacity-60">
+                <a href="#core" class="hover:text-green-500 transition-colors">Construct</a>
+                <a href="#vault" class="hover:text-green-500 transition-colors">Vault</a>
+                <a href="#compiler" class="hover:text-green-500 transition-colors">Sandbox</a>
             </div>
             <button onclick="toggleTheme()" class="p-2 liquid-glass rounded-xl hover:scale-110 transition-transform">
                 <i id="theme-icon" data-lucide="moon" class="w-4 h-4 text-green-500"></i>
@@ -107,22 +104,24 @@
 
     <section class="min-h-screen flex flex-col items-center justify-center text-center px-6">
         <div class="reveal active">
-            <span class="text-[9px] font-bold tracking-[0.6em] uppercase text-green-500 mb-6 block animate-pulse">Master_Protocol // 2026</span>
+            <span class="text-[9px] font-bold tracking-[0.6em] uppercase text-green-500 mb-6 block animate-pulse">System_Integrity // Protocol_01</span>
             <h1 class="text-[12vw] font-black tracking-tighter uppercase mb-6" style="color: var(--text-primary)">CONSTRUCT</h1>
             <p style="color: var(--text-secondary);" class="max-w-xl text-lg mx-auto leading-relaxed">
-                Shaping the <span style="color: var(--text-primary)" class="italic">architectural foundations</span> of Computer Science. Verify modules to construct your base.
+                Shaping the <span class="italic font-bold text-white">architectural foundations</span> of Computer Science. Verify modules to construct your base.
             </p>
         </div>
     </section>
 
     <section id="core" class="max-w-7xl mx-auto py-20 px-10">
-        <div id="card-container" class="grid grid-cols-1 md:grid-cols-5 gap-6"></div>
+        <div id="card-container" class="grid grid-cols-5 gap-6"></div>
     </section>
 
     <section id="vault" class="max-w-7xl mx-auto py-32 px-10 reveal">
-        <h2 class="text-7xl font-black uppercase tracking-tighter mb-4" style="color: var(--text-primary)">The <span class="text-green-500">Vault</span></h2>
-        <p class="text-[10px] uppercase tracking-[0.4em] opacity-40 mb-24">Verified Study Nodes & Documentation</p>
-        <div id="vault-nodes" class="grid grid-cols-1 md:grid-cols-3 gap-12"></div>
+        <div class="mb-24">
+            <h2 class="text-8xl font-black uppercase tracking-tighter leading-none" style="color: var(--text-primary)">The <span class="text-green-500">Vault</span></h2>
+            <p class="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40 mt-4">Verified Study Nodes & Documentation</p>
+        </div>
+        <div id="vault-nodes" class="grid grid-cols-3 gap-12"></div>
     </section>
 
     <section id="compiler" class="max-w-7xl mx-auto py-40 px-10 reveal">
@@ -138,17 +137,16 @@
                     <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
                 </div>
                 <div class="mono text-[9px] tracking-[0.3em] opacity-30 font-bold uppercase text-white">Root@mit-wpu_lab</div>
-                <div class="w-12"></div>
             </div>
             <div class="h-[600px] relative bg-[#010805]">
-                <iframe src="https://onecompiler.com/embed/python?theme=dark" width="100%" height="100%" frameborder="0" class="grayscale-[0.8] sepia-[0.1] hue-rotate-[100deg]"></iframe>
+                <iframe src="https://onecompiler.com/embed/python?theme=dark" width="100%" height="100%" frameborder="0" class="grayscale-[0.8] brightness-[0.9]"></iframe>
             </div>
         </div>
     </section>
 
     <footer class="py-64 text-center relative overflow-hidden">
         <div class="reveal">
-            <div class="text-[22vw] font-black tracking-tighter leading-none select-none italic opacity-10 transition-opacity duration-500" 
+            <div class="text-[22vw] font-black tracking-tighter leading-none select-none italic opacity-20 transition-opacity duration-500" 
                  style="color: var(--text-primary)">
                 MIT-WPU
             </div>
@@ -162,39 +160,28 @@
 
     <script>
         const topics = {
-            prog: { 
-                t: "Compile", i: "code", c: "green-400", 
-                list: [
-                    { n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Mastering memory addresses and pointer arithmetic in C." },
-                    { n: "Memory Layout", url: "https://osdev.org/Memory_Map_(x86)", d: "Understanding Stack vs Heap and x86 physical mapping." },
-                    { n: "C++ Foundations", url: "https://isocpp.org/get-started", d: "Core principles of modern high-performance C++." }
-                ] 
-            },
-            math: { 
-                t: "Logic", i: "hash", c: "blue-400", 
-                list: [
-                    { n: "Boolean Algebra", url: "https://brilliant.org/wiki/boolean-algebra/", d: "The mathematical bedrock of digital logic gates." },
-                    { n: "Graph Theory", url: "https://www.youtube.com/watch?v=LFKZLXVO-ra", d: "Algorithmic efficiency and network mapping by 3Blue1Brown." }
-                ] 
-            },
-            dsa: { 
-                t: "Buffer", i: "layers", c: "yellow-400", 
-                list: [
-                    { n: "B-Tree Indexing", url: "https://neetcode.io/courses/advanced-dsa/0", d: "Advanced data structuring for database engines." },
-                    { n: "Dynamic Prog", url: "https://roadmap.sh/computer-science", d: "Optimizing overlapping sub-problems with DP." }
-                ] 
-            },
-            web: { 
-                t: "Network", i: "globe", c: "orange-400", 
-                list: [{ n: "OSI Stack", url: "https://roadmap.sh/networking", d: "The 7-layer hierarchy of system connectivity." }] 
-            },
-            ai: { 
-                t: "Neural", i: "brain", c: "red-500", 
-                list: [{ n: "Transformers", url: "https://arxiv.org/abs/1706.03762", d: "The 'Attention is All You Need' foundation paper." }] 
-            }
+            prog: { t: "Compile", i: "code", c: "green-400", list: [
+                { n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Deep dive into C memory addresses." },
+                { n: "Memory Layout", url: "https://osdev.org/Memory_Map_(x86)", d: "Exploring Stack, Heap, and physical mappings." },
+                { n: "C++ Foundations", url: "https://isocpp.org/get-started", d: "High-performance architectural principles." }
+            ]},
+            math: { t: "Logic", i: "hash", c: "blue-400", list: [
+                { n: "Boolean Algebra", url: "https://brilliant.org/wiki/boolean-algebra/", d: "The logic gates of modern computing." },
+                { n: "Graph Theory", url: "https://www.youtube.com/watch?v=LFKZLXVO-ra", d: "3Blue1Brown's visual theory guide." }
+            ]},
+            dsa: { t: "Buffer", i: "layers", c: "yellow-400", list: [
+                { n: "B-Tree Indexing", url: "https://neetcode.io/courses/advanced-dsa/0", d: "Structural indexing for database engines." },
+                { n: "Dynamic Prog", url: "https://roadmap.sh/computer-science", d: "Optimizing overlapping sub-problems." }
+            ]},
+            web: { t: "Network", i: "globe", c: "orange-400", list: [{ n: "OSI Stack", url: "https://roadmap.sh/networking", d: "Connectivity hierarchy." }] },
+            ai: { t: "Neural", i: "brain", c: "red-500", list: [{ n: "Transformers", url: "https://arxiv.org/abs/1706.03762", d: "The 'Attention' mechanism protocol." }] }
         };
 
-        let state = JSON.parse(localStorage.getItem('cs-master-final')) || {};
+        let state = JSON.parse(localStorage.getItem('cs-construct-v-final')) || {};
+
+        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
+        audio.loop = true; audio.volume = 0.05; 
+        function startAudio() { audio.play(); }
 
         function toggleTheme() {
             const b = document.documentElement;
@@ -206,8 +193,10 @@
 
         document.addEventListener('mousemove', e => {
             const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
-            if(c) c.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-            if(f) f.style.transform = `translate(${e.clientX-16}px, ${e.clientY-16}px)`;
+            if(c && f) {
+                c.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                f.style.transform = `translate(${e.clientX-20}px, ${e.clientY-20}px)`;
+            }
             document.documentElement.style.setProperty('--m-x', (e.clientX/window.innerWidth)*100+'%');
             document.documentElement.style.setProperty('--m-y', (e.clientY/window.innerHeight)*100+'%');
         });
@@ -222,15 +211,14 @@
         function draw() {
             const m = document.getElementById('card-container');
             const v = document.getElementById('vault-nodes');
-
-            // 1. Progress Dashboard
+            
             if(m) {
                 m.innerHTML = Object.keys(topics).map(k => {
                     const top = topics[k];
-                    const doneCount = state[k] ? Object.keys(state[k]).length : 0;
-                    const p = Math.round((doneCount / top.list.length) * 100);
-                    return `
-                    <div onclick="openModal('${k}')" class="liquid-glass p-8 rounded-[2.5rem] reveal active hover:scale-105 cursor-pointer">
+                    const categoryState = state[k] || {};
+                    const activeDone = Object.keys(categoryState).filter(itemName => top.list.find(l => l.n === itemName));
+                    const p = Math.round((activeDone.length / top.list.length) * 100);
+                    return `<div onclick="openProgressModal('${k}')" class="liquid-glass p-8 rounded-[2.5rem] reveal active hover:scale-105 cursor-pointer">
                         <div class="flex justify-between mb-4">
                             <i data-lucide="${top.i}" class="text-${top.c} w-6 h-6"></i>
                             <span class="mono text-[10px] font-bold" style="color: var(--text-secondary)">${p}%</span>
@@ -243,17 +231,15 @@
                 }).join('');
             }
 
-            // 2. Vault Nodes (Study Area)
             if(v) {
                 v.innerHTML = Object.keys(topics).map(k => {
                     const top = topics[k];
-                    return `
-                    <div class="space-y-6 reveal active">
+                    return `<div class="space-y-6 reveal active">
                         <h4 class="text-[10px] font-bold tracking-[0.4em] text-${top.c} uppercase border-b border-white/5 pb-4">${top.t} Nodes</h4>
                         ${top.list.map(node => `
                             <div onclick="openStudyModal('${k}', '${node.n}')" class="liquid-glass p-8 rounded-3xl group cursor-pointer hover:border-white/20 transition-all">
                                 <h5 class="font-bold text-lg mb-1">${node.n}</h5>
-                                <p class="text-[9px] opacity-40 uppercase tracking-widest">Knowledge Node</p>
+                                <p class="text-[9px] opacity-40 uppercase tracking-widest">Study Documentation</p>
                             </div>
                         `).join('')}
                     </div>`;
@@ -262,9 +248,9 @@
             lucide.createIcons();
         }
 
-        // STUDY MODAL (Vault Click)
         function openStudyModal(cat, name) {
             const item = topics[cat].list.find(n => n.n === name);
+            const isVerified = state[cat] && state[cat][name];
             document.getElementById('popup-content').innerHTML = `
                 <div class="flex justify-between items-start mb-8">
                     <div>
@@ -277,29 +263,24 @@
                     <p>${item.d}</p>
                     <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
                         <p class="text-sm font-bold mb-2">Verified Reference:</p>
-                        <a href="${item.url}" target="_blank" class="text-green-500 break-all font-mono text-sm underline hover:text-green-400">
-                            ${item.url}
-                        </a>
+                        <a href="${item.url}" target="_blank" class="text-green-500 break-all font-mono text-sm underline hover:text-green-400">${item.url}</a>
                     </div>
                 </div>
                 <div class="mt-10 pt-8 border-t border-white/5 flex gap-4">
-                    <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:scale-105 transition-transform inline-block">
-                        Access Material
-                    </a>
+                    <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:scale-105 transition-transform inline-block">Access Material</a>
                     <button onclick="toggleVerify('${cat}', '${item.n}')" class="border border-white/10 text-white font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:bg-white/5 transition-all">
-                        ${(state[cat] && state[cat][item.n]) ? 'Verified ✓' : 'Verify Mastery'}
+                        ${isVerified ? 'Verified ✓' : 'Verify Mastery'}
                     </button>
                 </div>`;
             showModal();
         }
 
-        // PROGRESS MODAL (Card Click)
-        function openModal(k) {
+        function openProgressModal(k) {
             const t = topics[k];
             const done = state[k] || {};
             document.getElementById('popup-content').innerHTML = `
                 <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-4xl font-black uppercase tracking-tighter">${t.t}</h2>
+                    <h2 class="text-4xl font-black uppercase tracking-tighter">${t.t} Mastery</h2>
                     <button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button>
                 </div>
                 <div class="space-y-2">${t.list.map(item => `
@@ -315,26 +296,15 @@
         function toggleVerify(cat, name) {
             if(!state[cat]) state[cat] = {};
             state[cat][name] ? delete state[cat][name] : state[cat][name] = true;
-            localStorage.setItem('cs-master-final', JSON.stringify(state));
-            draw();
-            // Refresh modal if from study view
+            localStorage.setItem('cs-construct-v-final', JSON.stringify(state));
+            draw(); 
             const h2 = document.querySelector('#popup-content h2');
             if(h2 && h2.innerText === name.toUpperCase()) openStudyModal(cat, name);
-            else if(h2) openModal(cat);
+            else if(h2) openProgressModal(cat);
         }
 
-        function showModal() {
-            document.getElementById('popup-window').classList.add('active');
-            document.getElementById('modal-overlay').classList.add('active');
-            lucide.createIcons();
-        }
-
-        function closeModal() {
-            document.getElementById('popup-window').classList.remove('active');
-            document.getElementById('modal-overlay').classList.remove('active');
-        }
-
-        function startAudio() {}
+        function showModal() { document.getElementById('popup-window').classList.add('active'); document.getElementById('modal-overlay').classList.add('active'); lucide.createIcons(); }
+        function closeModal() { document.getElementById('popup-window').classList.remove('active'); document.getElementById('modal-overlay').classList.remove('active'); }
 
         draw();
         const obs = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('active')), {threshold: 0.1});
