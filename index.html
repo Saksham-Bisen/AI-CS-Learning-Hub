@@ -216,28 +216,67 @@ const masteryCategories = {
     math: { t: "Logic", i: "hash", c: "blue-400", list: ["Boolean Algebra", "Graph Theory"] },
     buffer: { t: "Buffer", i: "layers", c: "yellow-400", list: ["B-Tree Indexing", "Dynamic Prog"] },
     network: { t: "Network", i: "globe", c: "orange-400", list: ["OSI Stack"] },
-    neural: { t: "Neural", i: "brain", c: "red-500", list: ["Transformers"] }
-};
+    neural: { t: "Neural", i: "brain", c: "red-500", list: ["Transformers"] }};
 
 const documentation = {
-    prog: { t: "Compile Nodes", c: "green-400", list: [
-        { n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Logic of memory addresses." },
-        { n: "Memory Layout", url: "https://osdev.org/Memory_Map_(x86)", d: "Stack vs Heap mapping." },
-        { n: "C++ Foundations", url: "https://isocpp.org", d: "Core architectural C++." }
-    ]},
-    math: { t: "Logic Nodes", c: "blue-400", list: [
-        { n: "Boolean Algebra", url: "https://brilliant.org", d: "Bedrock of digital logic." },
-        { n: "Graph Theory", url: "https://www.youtube.com/watch?v=LFKZLXVO-ra", d: "Connectivity theory." }
-    ]},
-    buffer: { t: "Buffer Nodes", c: "yellow-400", list: [
-        { n: "B-Tree Indexing", url: "https://neetcode.io", d: "Database engine structures." },
-        { n: "Dynamic Prog", url: "https://roadmap.sh", d: "Optimizing sub-problems." }
-    ]}
-};
+        compile: { 
+            t: "Compile Nodes", 
+            c: "green-400", 
+            list: [
+                { 
+                    n: "Pointer Logic", 
+                    url: "https://en.cppreference.com/w/c/language/pointer", 
+                    d: "Master memory addressing, pointer arithmetic, and indirection in C/C++." 
+                },
+                { 
+                    n: "Memory Layout", 
+                    url: "https://www.geeksforgeeks.org/memory-layout-of-c-program/", 
+                    d: "Understanding the Stack, Heap, Data, and Text segments of an executable." 
+                },
+                { 
+                    n: "C++ Foundations", 
+                    url: "https://isocpp.org/wiki/faq/index", 
+                    d: "Core C++ principles: OOP, templates, and the Standard Template Library (STL)." 
+                }
+            ]
+        },
+        logic: { 
+            t: "Logic Nodes", 
+            c: "blue-400", 
+            list: [
+                { 
+                    n: "Boolean Algebra", 
+                    url: "https://www.electronics-tutorials.ws/boolean/bool_1.html", 
+                    d: "The mathematical foundation of digital logic gates and circuit simplification." 
+                },
+                { 
+                    n: "Graph Theory", 
+                    url: "https://www.britannica.com/science/graph-theory", 
+                    d: "Study of networks, vertices, and edges—essential for routing and data modeling." 
+                }
+            ]
+        },
+        buffer: { 
+            t: "Buffer Nodes", 
+            c: "yellow-400", 
+            list: [
+                { 
+                    n: "B-Tree Indexing", 
+                    url: "https://use-the-index-luke.com/sql/anatomy/the-tree", 
+                    d: "How database engines use balanced trees to perform lightning-fast searches." 
+                },
+                { 
+                    n: "Dynamic Prog", 
+                    url: "https://www.freecodecamp.org/news/follow-these-steps-to-solve-any-dynamic-programming-problem/", 
+                    d: "Breaking down complex problems into overlapping sub-problems for optimization." 
+                }
+            ]
+        }
+    };
 
 const studyMaterial = {
     docs: { t: "Documentation", c: "green-400", list: [{ n: "MDN Web Docs", url: "https://developer.mozilla.org" }, { n: "C++ Reference", url: "https://en.cppreference.com" }] },
-    video: { t: "Video Learning", c: "orange-400", list: [{ n: "freeCodeCamp", url: "https://youtube.com" }, { n: "MyCodeSchool (DSA)", url: "https://youtube.com" }] },
+    video: { t: "Video Learning", c: "orange-400", list: [{ n: "freeCodeCamp", url: "https://youtube.com/@freecodecamp" }, { n: "MyCodeSchool (DSA)", url: "https://youtube.com/@mycodeschool" }] },
     inter: { t: "Interactive", c: "blue-400", list: [{ n: "LeetCode", url: "https://leetcode.com" }, { n: "CodeWars", url: "https://codewars.com" }] }
 };
 
@@ -306,31 +345,45 @@ function openStudyModal(catKey, nodeName) {
             </div>
         </div>
         <div class="mt-10 pt-8 border-t border-white/5 flex gap-4">
-            <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full inline-block">Access Material</a>
-            <button onclick="toggleVerify('${catKey}', '${item.n}', '${category.t}')" class="border border-white/10 text-white font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:bg-white/5">Verify Mastery</button>
+            <a href="${item.url}" target="_blank" class="bg-green-500 text-black font-bold uppercase text-[10px] px-8 py-4 rounded-full hover:scale-105 transition-transform inline-block">Access Material</a>
         </div>`;
     showModal();
 }
 
 function openProgressModal(catKey, catTitle) {
-    const items = masteryCategories[catKey].list;
+    const category = masteryCategories[catKey];
+    if(!category) return;
+    
+    const items = category.list;
     const done = state[catKey] || {};
+    
     document.getElementById('popup-content').innerHTML = `
-        <div class="flex justify-between items-center mb-8"><h2 class="text-4xl font-black uppercase tracking-tighter">${catTitle} Progress</h2><button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button></div>
-        <div class="space-y-2">${items.map(i => `<div onclick="toggleVerify('${catKey}','${i}', '${catTitle}')" class="p-6 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:bg-white/10 cursor-pointer transition-all"><span class="${done[i] ? 'opacity-20 line-through text-green-500' : ''}">${i}</span><div class="w-5 h-5 rounded-full flex items-center justify-center border ${done[i] ? 'bg-green-500 border-none' : 'border-white/20'}">${done[i] ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div></div>`).join('')}</div>`;
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-4xl font-black uppercase tracking-tighter">${catTitle} Progress</h2>
+            <button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button>
+        </div>
+        <div class="space-y-2">
+            ${items.map(i => `
+                <div onclick="toggleVerify('${catKey}','${i}', '${catTitle}')" 
+                     class="p-6 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:bg-white/10 cursor-pointer transition-all">
+                    <span class="${done[i] ? 'opacity-20 line-through text-green-500' : ''}">${i}</span>
+                    <div class="w-5 h-5 rounded-full flex items-center justify-center border ${done[i] ? 'bg-green-500 border-none' : 'border-white/20'}">
+                        ${done[i] ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}
+                    </div>
+                </div>
+            `).join('')}
+        </div>`;
     showModal();
 }
 
+// 3. Ensure toggleVerify refreshes the progress modal:
 function toggleVerify(cat, name, title) {
     if(!state[cat]) state[cat] = {};
     state[cat][name] ? delete state[cat][name] : state[cat][name] = true;
     localStorage.setItem('cs-construct-master-final', JSON.stringify(state));
-    draw(); 
-    // Check if we are in a study modal or progress modal to refresh properly
-    const h2 = document.querySelector('#popup-content h2').innerText;
-    if(h2.includes('PROGRESS')) openProgressModal(cat, title);
+    draw(); // Updates the main dashboard bars
+    openProgressModal(cat, title); // Updates the checklist you are looking at
 }
-
 function showModal() { document.getElementById('popup-window').classList.add('active'); document.getElementById('modal-overlay').classList.add('active'); lucide.createIcons(); }
 function closeModal() { document.getElementById('popup-window').classList.remove('active'); document.getElementById('modal-overlay').classList.remove('active'); }
 
