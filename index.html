@@ -144,7 +144,8 @@
         </div>
         <div id="vault-nodes" class="grid grid-cols-3 gap-12"></div>
     </section>
-
+    
+    <iframe id="sandbox-ide" src="https://onecompiler.com/embed/python?theme=dark" width="100%" height="100%" frameborder="0" class="grayscale-[0.8] brightness-[0.9]"></iframe>
     <section id="compiler" class="max-w-7xl mx-auto py-40 px-10 reveal">
         <div class="mb-16">
             <h2 class="text-6xl font-black uppercase tracking-tighter mb-4" style="color: var(--text-primary)">Sandbox</h2>
@@ -205,13 +206,25 @@
         function startAudio() { audio.play(); }
 
         function toggleTheme() {
-            const b = document.documentElement;
-            const isLight = b.getAttribute('data-theme') === 'light';
-            b.setAttribute('data-theme', isLight ? 'dark' : 'light');
-            document.getElementById('theme-icon').setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            lucide.createIcons();
-        }
+    const b = document.documentElement;
+    const ide = document.getElementById('sandbox-ide');
+    const isLight = b.getAttribute('data-theme') === 'light';
+    
+    // Toggle the main theme attribute
+    const newTheme = isLight ? 'dark' : 'light';
+    b.setAttribute('data-theme', newTheme);
+    
+    // Update the Lucide icon
+    document.getElementById('theme-icon').setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+    
+    // UPDATE THE IDE THEME
+    if (ide) {
+        // This swaps the URL parameter dynamically
+        ide.src = `https://onecompiler.com/embed/python?theme=${newTheme}`;
+    }
 
+    lucide.createIcons();
+}
         document.addEventListener('mousemove', e => {
             const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
             if(c && f) {
