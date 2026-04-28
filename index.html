@@ -169,129 +169,148 @@
 
     <script>
         // --- AUDIO ENGINE ---
-        let ytPlayer; let isMuted = true; let audioStarted = false;
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('yt-player', {
-                height: '0', width: '0', videoId: '8MUlk3qjByY',
-                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': '8MUlk3qjByY' },
-                events: { 'onReady': (e) => { e.target.setVolume(20); e.target.mute(); } }
-            });
-        }
-        function startAudio() { 
-            if (!audioStarted && ytPlayer && ytPlayer.playVideo) { 
-                ytPlayer.playVideo(); ytPlayer.unMute(); isMuted = false;
-                const icon = document.getElementById('music-icon');
-                if(icon) icon.setAttribute('data-lucide', 'volume-2');
-                audioStarted = true; lucide.createIcons();
-            } 
-        }
-        function toggleMusic(e) {
-            if (e) e.stopPropagation();
-            const icon = document.getElementById('music-icon');
-            if (isMuted) { ytPlayer.unMute(); icon.setAttribute('data-lucide', 'volume-2'); isMuted = false; }
-            else { ytPlayer.mute(); icon.setAttribute('data-lucide', 'volume-x'); isMuted = true; }
-            lucide.createIcons();
-        }
+let ytPlayer; 
+let isMuted = true; 
+let audioStarted = false;
 
-        // --- UI CORE ---
-        function toggleTheme() {
-            const b = document.documentElement; const ide = document.getElementById('sandbox-ide');
-            const isLight = b.getAttribute('data-theme') === 'light';
-            const newTheme = isLight ? 'dark' : 'light';
-            b.setAttribute('data-theme', newTheme);
-            document.getElementById('theme-icon').setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (ide) ide.src = `https://onecompiler.com/embed/python?theme=${newTheme}`;
-            lucide.createIcons();
-        }
+function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player', {
+        height: '0', width: '0', videoId: '8MUlk3qjByY',
+        playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': '8MUlk3qjByY' },
+        events: { 'onReady': (e) => { e.target.setVolume(20); e.target.mute(); } }
+    });
+}
 
-        // --- DATA SETS ---
-        const masteryCategories = {
-            prog: { t: "Compile", i: "code", c: "green-400", list: ["Pointer Logic", "Memory Layout", "C++ Foundations"] },
-            math: { t: "Logic", i: "hash", c: "blue-400", list: ["Boolean Algebra", "Graph Theory"] },
-            buffer: { t: "Buffer", i: "layers", c: "yellow-400", list: ["B-Tree Indexing", "Dynamic Prog"] },
-            network: { t: "Network", i: "globe", c: "orange-400", list: ["OSI Stack"] },
-            neural: { t: "Neural", i: "brain", c: "red-500", list: ["Transformers"] }
-        };
+// Fixed: Unified audio start function
+function startAudio() { 
+    if (!audioStarted && ytPlayer && ytPlayer.playVideo) { 
+        ytPlayer.playVideo(); 
+        ytPlayer.unMute(); 
+        isMuted = false;
+        const icon = document.getElementById('music-icon');
+        if(icon) icon.setAttribute('data-lucide', 'volume-2');
+        audioStarted = true; 
+        lucide.createIcons();
+    } 
+}
 
-        const documentation = {
-            compile: { t: "Compile Nodes", c: "green-400", list: [{ n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Master memory addressing, pointer arithmetic, and indirection in C/C++." }, 
-                                                                  { n: "Memory Layout", url: "https://www.geeksforgeeks.org/memory-layout-of-c-program/", d: "Understanding the Stack, Heap, Data, and Text segments of an executable." }, 
-                                                                  { n: "C++ Foundations", url: "https://isocpp.org/wiki/faq/index", d: "Core C++ principles: OOP, templates, and the Standard Template Library (STL)." }] },
-            logic: { t: "Logic Nodes", c: "blue-400", list: [{ n: "Boolean Algebra", url: "https://www.electronics-tutorials.ws/boolean/bool_1.html", d: "The mathematical foundation of digital logic gates and circuit simplification." }, 
-                                                             { n: "Graph Theory", url: "https://www.britannica.com/science/graph-theory", d: "Study of networks, vertices, and edges—essential for routing and data modeling." }] },
-            buffer: { t: "Buffer Nodes", c: "yellow-400", list: [{ n: "B-Tree Indexing", url: "https://use-the-index-luke.com/sql/anatomy/the-tree", d: "How database engines use balanced trees to perform lightning-fast searches." }, 
-                                                                 { n: "Dynamic Prog", url: "https://www.freecodecamp.org/news/follow-these-steps-to-solve-any-dynamic-programming-problem/", d: "Breaking down complex problems into overlapping sub-problems for optimization.." }] }
-        };
+function toggleMusic(e) {
+    if (e) e.stopPropagation();
+    const icon = document.getElementById('music-icon');
+    if (isMuted) { ytPlayer.unMute(); icon.setAttribute('data-lucide', 'volume-2'); isMuted = false; }
+    else { ytPlayer.mute(); icon.setAttribute('data-lucide', 'volume-x'); isMuted = true; }
+    lucide.createIcons();
+}
 
-        const studyMaterial = {
-            docs: { t: "Documentation", c: "green-400", list: [{ n: "MDN Web Docs", url: "https://developer.mozilla.org" }, { n: "C++ Reference", url: "https://en.cppreference.com" }] },
-            video: { t: "Video Learning", c: "orange-400", list: [{ n: "freeCodeCamp", url: "https://www.youtube.com/@freecodecamp" }, { n: "MyCodeSchool (DSA)", url: "https://www.youtube.com/@mycodeschool" }] },
-            interactive: { t: "Interactive", c: "blue-400", list: [{ n: "LeetCode", url: "https://leetcode.com" }, { n: "CodeWars", url: "https://codewars.com" }] }
-        };
+// --- UI CORE ---
+function toggleTheme() {
+    const b = document.documentElement; 
+    const ide = document.getElementById('sandbox-ide');
+    const isLight = b.getAttribute('data-theme') === 'light';
+    const newTheme = isLight ? 'dark' : 'light';
+    b.setAttribute('data-theme', newTheme);
+    document.getElementById('theme-icon').setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+    if (ide) ide.src = `https://onecompiler.com/embed/python?theme=${newTheme}`;
+    lucide.createIcons();
+}
 
-        let state = JSON.parse(localStorage.getItem('cs-construct-master-final')) || {};
+// --- DATA SETS ---
+const masteryCategories = {
+    prog: { t: "Compile", i: "code", c: "green-400", list: ["Pointer Logic", "Memory Layout", "C++ Foundations"] },
+    math: { t: "Logic", i: "hash", c: "blue-400", list: ["Boolean Algebra", "Graph Theory"] },
+    buffer: { t: "Buffer", i: "layers", c: "yellow-400", list: ["B-Tree Indexing", "Dynamic Prog"] },
+    network: { t: "Network", i: "globe", c: "orange-400", list: ["OSI Stack"] },
+    neural: { t: "Neural", i: "brain", c: "red-500", list: ["Transformers"] }
+};
 
-        // --- RENDER ENGINE ---
-        function draw() {
-            const m = document.getElementById('card-container'); 
-            const v = document.getElementById('vault-grid'); 
-            const r = document.getElementById('resource-nodes');
-            
-            if(m) {
-                m.innerHTML = Object.keys(masteryCategories).map(k => {
-                    const top = masteryCategories[k], doneCount = state[k] ? Object.keys(state[k]).length : 0;
-                    const p = Math.round((doneCount / top.list.length) * 100);
-                    return `<div onclick="openProgressModal('${k}', '${top.t}')" class="liquid-glass p-8 rounded-[2.5rem] reveal active hover:scale-105 cursor-pointer">
-                        <div class="flex justify-between mb-4"><i data-lucide="${top.i}" class="text-${top.c} w-6 h-6"></i><span class="mono text-[10px] font-bold" style="color: var(--text-secondary)">${p}%</span></div>
-                        <h3 class="text-xs font-bold uppercase tracking-widest">${top.t}</h3>
-                        <div class="mt-4 h-1 bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-${top.c} transition-all duration-700" style="width:${p}%"></div></div>
-                    </div>`;
-                }).join('');
-            }
-            if(v) {
-                v.innerHTML = Object.keys(documentation).map(k => `
-                    <div class="space-y-6">
-                        <h4 class="text-[10px] font-bold tracking-widest text-${documentation[k].c} uppercase border-b border-white/5 pb-4">${documentation[k].t}</h4>
-                        ${documentation[k].list.map(node => `
-                            <div onclick="openStudyModal('${node.n}', '${node.d}', '${node.url}')" class="liquid-glass p-8 rounded-3xl cursor-pointer hover:border-white/20 transition-all">
-                                <h5 class="font-bold text-lg">${node.n}</h5>
-                                <p class="text-[9px] opacity-40 uppercase tracking-widest mt-2">Study Documentation</p>
-                            </div>
-                        `).join('')}
-                    </div>`).join('');
-            }
-            if(r) {
-                r.innerHTML = Object.keys(studyMaterial).map(k => `
-                    <div class="space-y-6">
-                        <h4 class="text-[10px] font-bold tracking-widest text-${studyMaterial[k].c} uppercase border-b border-white/5 pb-4">${studyMaterial[k].t}</h4>
-                        ${studyMaterial[k].list.map(node => `
-                            <a href="${node.url}" target="_blank" class="liquid-glass p-8 rounded-3xl block hover:border-white/20 transition-all">
-                                <h5 class="font-bold text-lg">${node.n}</h5>
-                                <p class="text-[9px] opacity-40 uppercase tracking-widest mt-2">Resource Node</p>
-                            </a>
-                        `).join('')}
-                    </div>`).join('');
-            }
-            lucide.createIcons();
-        }
+const documentation = {
+    compile: { t: "Compile Nodes", c: "green-400", list: [
+        { n: "Pointer Logic", url: "https://en.cppreference.com/w/c/language/pointer", d: "Master memory addressing, pointer arithmetic, and indirection in C/C++." }, 
+        { n: "Memory Layout", url: "https://www.geeksforgeeks.org/memory-layout-of-c-program/", d: "Understanding the Stack, Heap, Data, and Text segments of an executable." }, 
+        { n: "C++ Foundations", url: "https://isocpp.org/wiki/faq/index", d: "Core C++ principles: OOP, templates, and the Standard Template Library (STL)." }
+    ]},
+    logic: { t: "Logic Nodes", c: "blue-400", list: [
+        { n: "Boolean Algebra", url: "https://www.electronics-tutorials.ws/boolean/bool_1.html", d: "The mathematical foundation of digital logic gates and circuit simplification." }, 
+        { n: "Graph Theory", url: "https://www.britannica.com/science/graph-theory", d: "Study of networks, vertices, and edges—essential for routing and data modeling." }
+    ]},
+    buffer: { t: "Buffer Nodes", c: "yellow-400", list: [
+        { n: "B-Tree Indexing", url: "https://use-the-index-luke.com/sql/anatomy/the-tree", d: "How database engines use balanced trees to perform lightning-fast searches." }, 
+        { n: "Dynamic Prog", url: "https://www.freecodecamp.org/news/follow-these-steps-to-solve-any-dynamic-programming-problem/", d: "Breaking down complex problems into overlapping sub-problems for optimization.." }
+    ]}
+};
 
-        // --- INTERACTION HANDLERS ---
-        document.addEventListener('mousemove', e => {
-            const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
-            c.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-            f.style.transform = `translate(${e.clientX-20}px, ${e.clientY-20}px)`;
-            document.documentElement.style.setProperty('--m-x', (e.clientX/window.innerWidth)*100+'%');
-            document.documentElement.style.setProperty('--m-y', (e.clientY/window.innerHeight)*100+'%');
-        });
+const studyMaterial = {
+    docs: { t: "Documentation", c: "green-400", list: [{ n: "MDN Web Docs", url: "https://developer.mozilla.org" }, { n: "C++ Reference", url: "https://en.cppreference.com" }] },
+    video: { t: "Video Learning", c: "orange-400", list: [{ n: "freeCodeCamp", url: "https://www.youtube.com/@freecodecamp" }, { n: "MyCodeSchool (DSA)", url: "https://www.youtube.com/@mycodeschool" }] },
+    interactive: { t: "Interactive", c: "blue-400", list: [{ n: "LeetCode", url: "https://leetcode.com" }, { n: "CodeWars", url: "https://codewars.com" }] }
+};
 
-        window.addEventListener('scroll', () => {
-            const rail = document.getElementById('progress-rail'); const fill = document.getElementById('progress-fill');
-            const scrollPos = window.scrollY; const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            rail.style.opacity = scrollPos > 20 ? "1" : "0";
-            if(fill) fill.style.height = (scrollPos / totalHeight * 100) + "%";
-        });
+let state = JSON.parse(localStorage.getItem('cs-construct-master-final')) || {};
 
-        function openStudyModal(catKey, nodeName) {
+// --- RENDER ENGINE ---
+function draw() {
+    const m = document.getElementById('card-container'); 
+    const v = document.getElementById('vault-grid'); 
+    const r = document.getElementById('resource-nodes');
+    
+    if(m) {
+        m.innerHTML = Object.keys(masteryCategories).map(k => {
+            const top = masteryCategories[k], doneCount = state[k] ? Object.keys(state[k]).length : 0;
+            const p = Math.round((doneCount / top.list.length) * 100);
+            return `<div onclick="openProgressModal('${k}', '${top.t}')" class="liquid-glass p-8 rounded-[2.5rem] reveal active hover:scale-105 cursor-pointer">
+                <div class="flex justify-between mb-4"><i data-lucide="${top.i}" class="text-${top.c} w-6 h-6"></i><span class="mono text-[10px] font-bold" style="color: var(--text-secondary)">${p}%</span></div>
+                <h3 class="text-xs font-bold uppercase tracking-widest">${top.t}</h3>
+                <div class="mt-4 h-1 bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-${top.c} transition-all duration-700" style="width:${p}%"></div></div>
+            </div>`;
+        }).join('');
+    }
+    if(v) {
+        v.innerHTML = Object.keys(documentation).map(k => `
+            <div class="space-y-6">
+                <h4 class="text-[10px] font-bold tracking-widest text-${documentation[k].c} uppercase border-b border-white/5 pb-4">${documentation[k].t}</h4>
+                ${documentation[k].list.map(node => `
+                    <div onclick="openStudyModal('${k}', '${node.n}')" class="liquid-glass p-8 rounded-3xl cursor-pointer hover:border-white/20 transition-all">
+                        <h5 class="font-bold text-lg">${node.n}</h5>
+                        <p class="text-[9px] opacity-40 uppercase tracking-widest mt-2">Study Documentation</p>
+                    </div>
+                `).join('')}
+            </div>`).join('');
+    }
+    if(r) {
+        r.innerHTML = Object.keys(studyMaterial).map(k => `
+            <div class="space-y-6">
+                <h4 class="text-[10px] font-bold tracking-widest text-${studyMaterial[k].c} uppercase border-b border-white/5 pb-4">${studyMaterial[k].t}</h4>
+                ${studyMaterial[k].list.map(node => `
+                    <a href="${node.url}" target="_blank" class="liquid-glass p-8 rounded-3xl block hover:border-white/20 transition-all">
+                        <h5 class="font-bold text-lg">${node.n}</h5>
+                        <p class="text-[9px] opacity-40 uppercase tracking-widest mt-2">Resource Node</p>
+                    </a>
+                `).join('')}
+            </div>`).join('');
+    }
+    lucide.createIcons();
+}
+
+// --- INTERACTION HANDLERS ---
+document.addEventListener('mousemove', e => {
+    const c = document.getElementById('cursor'), f = document.getElementById('cursor-follower');
+    c.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    f.style.transform = `translate(${e.clientX-20}px, ${e.clientY-20}px)`;
+    document.documentElement.style.setProperty('--m-x', (e.clientX/window.innerWidth)*100+'%');
+    document.documentElement.style.setProperty('--m-y', (e.clientY/window.innerHeight)*100+'%');
+});
+
+window.addEventListener('scroll', () => {
+    const rail = document.getElementById('progress-rail'); 
+    const fill = document.getElementById('progress-fill');
+    const scrollPos = window.scrollY; 
+    const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    rail.style.opacity = scrollPos > 20 ? "1" : "0";
+    if(fill) fill.style.height = (scrollPos / totalHeight * 100) + "%";
+});
+
+// FIXED: Matching parameters with the draw() call
+function openStudyModal(catKey, nodeName) {
     const item = documentation[catKey].list.find(n => n.n === nodeName);
     document.getElementById('popup-content').innerHTML = `
         <div class="flex justify-between items-start mb-8">
@@ -314,28 +333,36 @@
     showModal();
 }
 
-        function openProgressModal(catKey, catTitle) {
-            const items = masteryCategories[catKey].list;
-            const done = state[catKey] || {};
-            document.getElementById('popup-content').innerHTML = `
-                <div class="flex justify-between items-center mb-8"><h2 class="text-4xl font-black uppercase tracking-tighter">${catTitle} Mastery</h2><button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button></div>
-                <div class="space-y-2">${items.map(i => `<div onclick="toggleVerify('${catKey}','${i}')" class="p-6 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:bg-white/10 cursor-pointer transition-all"><span class="${done[i] ? 'opacity-20 line-through text-green-500' : ''}">${i}</span><div class="w-5 h-5 rounded-full flex items-center justify-center border ${done[i] ? 'bg-green-500 border-none' : 'border-white/20'}">${done[i] ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div></div>`).join('')}</div>`;
-            showModal();
-        }
+function openProgressModal(catKey, catTitle) {
+    const items = masteryCategories[catKey].list;
+    const done = state[catKey] || {};
+    document.getElementById('popup-content').innerHTML = `
+        <div class="flex justify-between items-center mb-8"><h2 class="text-4xl font-black uppercase tracking-tighter">${catTitle} Mastery</h2><button onclick="closeModal()"><i data-lucide="x" class="opacity-30"></i></button></div>
+        <div class="space-y-2">${items.map(i => `<div onclick="toggleVerify('${catKey}','${i}', '${catTitle}')" class="p-6 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:bg-white/10 cursor-pointer transition-all"><span class="${done[i] ? 'opacity-20 line-through text-green-500' : ''}">${i}</span><div class="w-5 h-5 rounded-full flex items-center justify-center border ${done[i] ? 'bg-green-500 border-none' : 'border-white/20'}">${done[i] ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div></div>`).join('')}</div>`;
+    showModal();
+}
 
-        function toggleVerify(cat, name) {
-            if(!state[cat]) state[cat] = {};
-            state[cat][name] ? delete state[cat][name] : state[cat][name] = true;
-            localStorage.setItem('cs-construct-master-final', JSON.stringify(state));
-            draw(); closeModal();
-        }
+function toggleVerify(cat, name, title) {
+    if(!state[cat]) state[cat] = {};
+    state[cat][name] ? delete state[cat][name] : state[cat][name] = true;
+    localStorage.setItem('cs-construct-master-final', JSON.stringify(state));
+    draw(); 
+    openProgressModal(cat, title); // Keep modal open to show progress
+}
 
-        function showModal() { document.getElementById('popup-window').classList.add('active'); document.getElementById('modal-overlay').classList.add('active'); lucide.createIcons(); }
-        function closeModal() { document.getElementById('popup-window').classList.remove('active'); document.getElementById('modal-overlay').classList.remove('active'); }
+function showModal() { 
+    document.getElementById('popup-window').classList.add('active'); 
+    document.getElementById('modal-overlay').classList.add('active'); 
+    lucide.createIcons(); 
+}
+function closeModal() { 
+    document.getElementById('popup-window').classList.remove('active'); 
+    document.getElementById('modal-overlay').classList.remove('active'); 
+}
 
-        draw();
-        const obs = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('active')), {threshold: 0.1});
-        document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+draw();
+const obs = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && x.target.classList.add('active')), {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
     </script>
 </body>
 </html>
